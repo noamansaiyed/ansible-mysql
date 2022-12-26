@@ -1,0 +1,22 @@
+---   
+- hosts: mysql
+  vars:
+    mysql_root_username: root   
+    mysql_root_password: password   
+
+  vars_prompt:
+    - name: UserName
+      prompt: "Enter Mysql New Root Username"
+      private: false
+    - name: PassWord
+      prompt: "Enter Mysql Password For New Root User"
+      private: false
+  tasks:
+    - name: Create Root User
+      mysql_user:
+        login_user: "{{ mysql_root_username }}"
+        login_password: "{{ mysql_root_password }}"
+        name: "{{ UserName }}"
+        password: "{{ PassWord }}"
+        state: present
+        priv: "*.*:ALL"

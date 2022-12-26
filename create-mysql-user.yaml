@@ -1,0 +1,37 @@
+---   
+- hosts: mysql
+  vars:
+    mysql_root_username: root   
+    mysql_root_password: password   
+
+  vars_prompt:
+    - name: UserName
+      prompt: "Enter Mysql Username For Newuser"
+      private: false
+    - name: PassWord
+      prompt: "Enter Mysql Password For Newuser"
+      private: false
+    - name: DbName
+      prompt: "Enter Mysql Database Name"
+      private: false
+  tasks:
+    - name: Create New Database
+      mysql_db:
+        login_user: "{{ mysql_root_username }}"
+        login_password: "{{ mysql_root_password }}"
+        db: "{{ DbName }}"
+        state: present
+    - name: Create New user
+      mysql_user:
+        login_user: "{{ mysql_root_username }}"
+        login_password: "{{ mysql_root_password }}"
+        name: "{{ UserName }}"
+        password: "{{ PassWord }}"
+        state: present
+        priv: "{{ DbName }}.*:ALL"
+
+   # Remove User
+   #- name: Remove Mysql User
+   #  mysql_user:
+   #    name: ""
+   #    state: absent
